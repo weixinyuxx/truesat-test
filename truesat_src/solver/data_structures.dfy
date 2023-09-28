@@ -519,7 +519,7 @@ trait DataStructures {
           positiveLiteralsToClauses, negativeLiteralsToClauses;
   {
     validReferences() &&
-    validVariablesCount() &&
+    validVariablesCount() && 
     validClauses() &&
     countLiterals(clausesCount) < Int32.max as int &&
     validAssignmentTrace() &&
@@ -1238,6 +1238,18 @@ trait DataStructures {
   {
     exists tau' :: validValuesTruthAssignment(tau')
                 && isTauComplete(tau')
+                && isExtendingTau(tau, tau')
+                && isSatisfied(tau')
+  }
+
+  predicate isSatisfiableTruthAssignment(tau : seq<Int32.t>, tau':seq<Int32.t>)
+    reads `variablesCount, `clauses, `clausesCount,
+          `clauseLength, clauseLength;
+    requires validVariablesCount();
+    requires validClauses();
+    requires validValuesTruthAssignment(tau);
+  {
+    validValuesTruthAssignment(tau')
                 && isExtendingTau(tau, tau')
                 && isSatisfied(tau')
   }

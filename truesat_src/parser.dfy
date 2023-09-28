@@ -118,7 +118,7 @@ module Useless {
       var variablesCount : Int32.t := 0;
       var clausesCount : Int32.t := 0;
       var clauses : seq<seq<Int32.t>> := [];
-      var clause : array<Int32.t> := new Int32.t[1000];
+      var clause : array<Int32.t> := new Int32.t[1000] (_ => 0);
       var clauseLength : Int32.t := 0;
       var ok := false; 
       var literalsCount : Int32.t := 0;
