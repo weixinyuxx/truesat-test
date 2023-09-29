@@ -18,6 +18,9 @@ class Formula extends DataStructures {
       fresh(this.falseLiteralsCount) && fresh(this.positiveLiteralsToClauses) &&
       fresh(this.negativeLiteralsToClauses) && fresh(this.truthAssignment);
     ensures this.decisionLevel == -1;
+    // Export the counterexample
+    // ensures this.decisionLevel == -1;
+
   {
     assert 0 < variablesCount < Int32.max;
     assert 0 < |clauses| <= Int32.max as int;
@@ -82,6 +85,51 @@ class Formula extends DataStructures {
     inputPredicate_countLiterals(clausesCount);
     assert clauses == clauses[..clausesCount];
     assert countLiterals(clausesCount) == InputPredicate.countLiterals(clauses);
+
+    // Below is the implementation for the counterexample
+    // this.variablesCount := 2;
+    // this.clauses := [[1]];
+    // this.decisionLevel := -1;
+
+
+    // this.traceVariable := new Int32.t[2] (_ => 0);
+    // this.traceValue := new bool[2] (_ => false);
+    // this.traceDLStart := new Int32.t[2] (_ => 0);
+    // this.traceDLEnd := new Int32.t[2] (_ => 0);
+    // this.assignmentsTrace := {};
+
+
+    // var clsLength := 1;
+    // this.clausesCount := clsLength;
+    // this.clauseLength := new Int32.t[clsLength] (_ => 0);
+
+
+    // this.trueLiteralsCount := new Int32.t[clsLength] (_ => 0);
+    // this.falseLiteralsCount := new Int32.t[clsLength] (_ => 0);
+
+
+    // this.positiveLiteralsToClauses := new seq<Int32.t>[2] (_ => []);
+    // this.negativeLiteralsToClauses := new seq<Int32.t>[2] (_ => []);
+
+
+    // this.truthAssignment := new Int32.t[2] (_ => -1);
+
+
+    // new;
+    // this.clauseLength[0] := 1;
+
+
+    // this.trueLiteralsCount[0] := 0;
+
+
+    // this.falseLiteralsCount[0] := 0;
+
+
+    // this.positiveLiteralsToClauses[0] := [0];
+    // this.positiveLiteralsToClauses[1] := [];
+    // this.negativeLiteralsToClauses[0] := [];
+    // this.negativeLiteralsToClauses[1] := [];
+
   }
 
   lemma inputPredicate_countLiterals(cI : Int32.t)
