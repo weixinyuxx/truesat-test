@@ -159,4 +159,29 @@ class SATSolver {
     formula.level0UnitPropagation();
     result := solve();
   }
+
+  method start_counterexample() returns (result : SAT_UNSAT) // tau may be arbitrary truth assignment
+ // original specification
+    requires formula.valid();
+    requires formula.decisionLevel == -1;
+    modifies formula.truthAssignment, formula.traceVariable, formula.traceValue,
+              formula.traceDLStart, formula.traceDLEnd, formula`decisionLevel,
+              formula`assignmentsTrace, formula.trueLiteralsCount,
+              formula.falseLiteralsCount;
+      ensures formula.valid();
+    ensures result.SAT? ==> formula.validValuesTruthAssignment(result.tau);
+    ensures result.SAT? ==> formula.isSatisfiableExtend(old(formula.truthAssignment[..]));
+    ensures result.UNSAT? ==>
+      !formula.isSatisfiableExtend(old(formula.truthAssignment[..]));
+    // counterexample specific - a wrong behavior
+    ensures result.SAT? ==> result.tau[0] == -1
+  {
+  // original start() implementation:
+    formula.level0UnitPropagation();
+    result := solve();
+  // added at the end of original start() implementation:
+    if result.SAT? {
+      result := SAT(seq(formula.variablesCount, _ => -1));
+    } 
+  }
 }
