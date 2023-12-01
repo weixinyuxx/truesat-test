@@ -9,7 +9,7 @@ module Utils {
     ensures forall j :: 0 <= j < r.Length ==> r[j] == d;
     ensures fresh(r);
   {
-    r := new Int32.t[n];
+    r := new Int32.t[n](_=>0);
 
     var index : Int32.t := 0;
     while (index < n)

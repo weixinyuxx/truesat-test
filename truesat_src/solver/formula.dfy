@@ -11,7 +11,8 @@ class Formula extends DataStructures {
     requires InputPredicate.valid((variablesCount, clauses));
 
     ensures valid();
-
+    ensures this.variablesCount == variablesCount
+    ensures this.clauses == clauses
     ensures fresh(this.traceVariable) && fresh(this.traceValue) &&
       fresh(this.traceDLStart) && fresh(this.traceDLEnd) &&
       fresh(this.clauseLength) && fresh(this.trueLiteralsCount) &&
@@ -30,23 +31,23 @@ class Formula extends DataStructures {
     this.clauses := clauses;
     this.decisionLevel := -1;
 
-    this.traceVariable := new Int32.t[variablesCount];
-    this.traceValue := new bool[variablesCount];
-    this.traceDLStart := new Int32.t[variablesCount];
-    this.traceDLEnd := new Int32.t[variablesCount];
+    this.traceVariable := new Int32.t[variablesCount](_=>0);
+    this.traceValue := new bool[variablesCount](_=>false);
+    this.traceDLStart := new Int32.t[variablesCount](_=>0);
+    this.traceDLEnd := new Int32.t[variablesCount](_=>0);
     this.assignmentsTrace := {};
 
     var clsLength := |clauses| as Int32.t;
     this.clausesCount := clsLength;
-    this.clauseLength := new Int32.t[clsLength];
+    this.clauseLength := new Int32.t[clsLength](_=>0);
 
-    this.trueLiteralsCount := new Int32.t[clsLength];
-    this.falseLiteralsCount := new Int32.t[clsLength];
+    this.trueLiteralsCount := new Int32.t[clsLength](_=>0);
+    this.falseLiteralsCount := new Int32.t[clsLength](_=>0);
 
-    this.positiveLiteralsToClauses := new seq<Int32.t>[variablesCount];
-    this.negativeLiteralsToClauses := new seq<Int32.t>[variablesCount];
+    this.positiveLiteralsToClauses := new seq<Int32.t>[variablesCount](_=>[]);
+    this.negativeLiteralsToClauses := new seq<Int32.t>[variablesCount](_=>[]);
 
-    this.truthAssignment := new Int32.t[variablesCount];
+    this.truthAssignment := new Int32.t[variablesCount](_=>0);
 
     new;
 
@@ -1630,8 +1631,8 @@ class Formula extends DataStructures {
     requires valid();
     requires !hasEmptyClause();
     requires isEmpty();
-
     ensures isSatisfiableExtend(truthAssignment[..]);
+    ensures isSatisfiableTruthAssignment(truthAssignment[..], truthAssignment[..])
   {
     assert forall i :: 0 <= i < |clauses| ==>
         trueLiteralsCount[i] > 0;
